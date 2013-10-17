@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.FileObserver;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,17 +34,17 @@ import android.widget.Toast;
  * Let's the user choose a directory on the storage device. The selected folder
  * will be sent back to the starting activity as an activity result.
  */
-public class DirectoryChooserActivity extends Activity {
+public class DirectoryChooserActivity extends ActionBarActivity {
     public static final String EXTRA_NEW_DIR_NAME = "directory_name";
-    
-	/**
-	 * Extra to define the path of the directory that will be shown first. 
-	 * If it is not sent or if path denotes a non readable/writable directory
-	 * or it is not a directory, it defaults to 
-	 * {@link android.os.Environment#getExternalStorageDirectory()}
-	 */
-	public static final String EXTRA_INITIAL_DIRECTORY = "initial_directory";
-	
+
+    /**
+     * Extra to define the path of the directory that will be shown first.
+     * If it is not sent or if path denotes a non readable/writable directory
+     * or it is not a directory, it defaults to
+     * {@link android.os.Environment#getExternalStorageDirectory()}
+     */
+    public static final String EXTRA_INITIAL_DIRECTORY = "initial_directory";
+
     public static final String RESULT_SELECTED_DIR = "selected_dir";
     public static final int RESULT_CODE_DIR_SELECTED = 1;
 
@@ -142,15 +143,15 @@ public class DirectoryChooserActivity extends Activity {
         mListDirectoriesAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, mFilenames);
         mListDirectories.setAdapter(mListDirectoriesAdapter);
-        
+
         String initialDirectoryPath = getIntent().getStringExtra(EXTRA_INITIAL_DIRECTORY);
         File initialDir = (initialDirectoryPath != null && isValidFile(new File(initialDirectoryPath))) ? new File(initialDirectoryPath) : Environment.getExternalStorageDirectory();
-        
+
         changeDirectory(initialDir);
     }
 
     /* package */void setupActionBar() {
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     private void debug(String message, Object... args) {
@@ -243,7 +244,7 @@ public class DirectoryChooserActivity extends Activity {
     private void refreshButtonState() {
         if (mSelectedDir != null) {
             mBtnConfirm.setEnabled(isValidFile(mSelectedDir));
-            invalidateOptionsMenu();
+            supportInvalidateOptionsMenu();
         }
     }
 
